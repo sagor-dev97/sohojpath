@@ -6,25 +6,34 @@ import JobView from '../views/jobs/JobView.vue'
 import GkView from '../views/gk/GkView.vue'
 import ArticlesView from '../views/articles/ArticlesView.vue'
 import ArticleView from '../views/articles/ArticleView.vue'
+import ExamView from '../views/gk/ExamView.vue'
+import AccountView from '../views/AccountView.vue'
+import ProfileView from '../views/ProfileView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
   scrollBehavior: () => ({ top: 0 }),
   routes: [
-    { path: '/', name: 'home', component: HomeView, meta: { title: 'সহজপাঠ — শিক্ষা ও চাকরির আপডেট', description: 'চাকরি, শিক্ষা ও সাধারণ জ্ঞানের নির্ভরযোগ্য আপডেট এক জায়গায়।' } },
-    { path: '/jobs', name: 'jobs', component: JobsView, meta: { title: 'চাকরির সার্কুলার — সহজপাঠ', description: 'সাম্প্রতিক চাকরির নিয়োগ বিজ্ঞপ্তি, যোগ্যতা ও আবেদনের তথ্য খুঁজুন।' } },
-    { path: '/jobs/:slug', name: 'job', component: JobView, meta: { title: 'চাকরির বিস্তারিত — সহজপাঠ', description: 'চাকরির বিজ্ঞপ্তি, যোগ্যতা, শেষ সময় ও আবেদন লিংক দেখুন।' } },
-    { path: '/gk', name: 'gk', component: GkView, meta: { title: 'দৈনিক সাধারণ জ্ঞান কুইজ — সহজপাঠ', description: 'প্রতিদিনের জিকে কুইজে অংশ নিন এবং নিজের প্রস্তুতি যাচাই করুন।' } },
-    { path: '/articles', name: 'articles', component: ArticlesView, meta: { title: 'সাম্প্রতিক খবর — সহজপাঠ', description: 'সাম্প্রতিক ঘটনা ও খবর পড়ুন।' } },
-    { path: '/articles/:slug', name: 'article', component: ArticleView, meta: { title: 'সাম্প্রতিক খবর — সহজপাঠ', description: 'সাম্প্রতিক ঘটনার বিস্তারিত পড়ুন।' } },
+    { path: '/', name: 'home', component: HomeView, meta: { title: 'SohojPath - Education and Job Updates', description: 'Education, jobs and general knowledge updates in one place.' } },
+    { path: '/jobs', name: 'jobs', component: JobsView, meta: { title: 'Job Circulars - SohojPath', description: 'Find recent job openings and application details in Bangladesh.' } },
+    { path: '/jobs/:slug', name: 'job', component: JobView, meta: { title: 'Job Details - SohojPath', description: 'Job circular details, qualifications and application information.' } },
+    { path: '/gk/exam', name: 'gk-exam', component: ExamView, meta: { title: 'MCQ Exam' } },
+    { path: '/gk/exam-categories', name: 'gk-exam-categories', component: () => import('../views/gk/ExamCatalogView.vue'), meta: { title: 'Exam Categories - SohojPath', description: 'Browse published MCQ exam categories.' } },
+    { path: '/gk/exam-categories/:slug', name: 'gk-exam-category', component: () => import('../views/gk/ExamCatalogView.vue'), meta: { title: 'Published Exams - SohojPath', description: 'Choose a published exam and test your knowledge.' } },
+    { path: '/gk/exam-paper/:paperId', name: 'gk-exam-paper', component: () => import('../views/gk/ExamPaperView.vue'), meta: { title: 'MCQ Exam' } },
+    { path: '/account', name: 'account', component: AccountView, meta: { title: 'Account' } },
+    { path: '/profile', name: 'profile', component: ProfileView, meta: { title: 'Profile' } },
+    { path: '/gk', name: 'gk', component: GkView, meta: { title: 'Daily General Knowledge Quiz - SohojPath', description: 'Take a daily general knowledge quiz and check your preparation.' } },
+    { path: '/articles', name: 'articles', component: ArticlesView, meta: { title: 'Recent News - SohojPath', description: 'Read recent events, news and updates.' } },
+    { path: '/articles/:slug', name: 'article', component: ArticleView, meta: { title: 'Recent News - SohojPath', description: 'Read the full details of this recent news article.' } },
     { path: '/:pathMatch(.*)*', redirect: '/' },
   ],
 })
 
 router.afterEach((to) => {
-  document.title = to.meta.title || 'সহজপাঠ'
+  document.title = to.meta.title || 'SohojPath - Education and Job Updates'
   const description = document.querySelector('meta[name="description"]')
-  if (description) description.content = to.meta.description || 'চাকরি, শিক্ষা ও সাধারণ জ্ঞানের নির্ভরযোগ্য আপডেট।'
+  if (description) description.content = to.meta.description || 'Education, jobs and general knowledge updates in one place.'
 
   let canonical = document.querySelector('link[rel="canonical"]')
   if (!canonical) {

@@ -1,4 +1,5 @@
-import axios from 'axios'
+﻿import axios from 'axios'
+import { getAccessToken } from './auth'
 
 const configuredApiUrl = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_APP_URL
 const isLocalHost = ['localhost', '127.0.0.1'].includes(window.location.hostname)
@@ -17,3 +18,11 @@ const http = axios.create({
 })
 
 export default http
+
+http.interceptors.request.use((config) => {
+  const token = getAccessToken()
+  if (token) {
+    config.headers.Authorization = 'Bearer ' + token
+  }
+  return config
+})
