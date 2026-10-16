@@ -43,3 +43,10 @@ a { text-decoration: none; }
 @keyframes water-ripple-expand { from { width: 0; height: 0; opacity: .8; } to { width: 90px; height: 90px; opacity: 0; } }
 @keyframes water-ripple-wave { from { transform: scale(.2); opacity: .7; } to { transform: scale(1.8); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .water-ripple { display: none; } }
+
+.article-body table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+.article-body th, .article-body td { border: 1px solid #cbd5e1; padding: .5rem .75rem; text-align: left; }
+.article-body th { background: #f1f5f9; font-weight: 700; }
+.article-body pre { overflow-x: auto; border-radius: .75rem; background: #0f172a; padding: 1rem; color: #e2e8f0; }
+.article-body mark { border-radius: .2rem; padding: 0 .15rem; }
+.article-body hr { margin: 1.5rem 0; border-color: #cbd5e1; }
