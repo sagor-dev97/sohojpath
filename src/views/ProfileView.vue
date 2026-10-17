@@ -30,6 +30,8 @@ async function load() {
   }
 }
 
+function displayScore(score) { const value = Number(score); return Number.isFinite(value) ? value : 0 }
+
 async function updateName() {
   busy.value = true
   error.value = ''
@@ -65,7 +67,7 @@ onMounted(load)
         <section class="mt-7"><h2 class="mb-4 text-xl font-extrabold">আমার সংরক্ষিত পরীক্ষার ফল</h2>
           <div v-if="!attempts.length" class="surface p-8 text-center text-sm text-slate-500">এখনো কোনো পরীক্ষার ফল সংরক্ষণ করেননি।</div>
           <div v-else class="grid gap-4"><article v-for="attempt in attempts" :key="attempt.id" class="surface p-5">
-            <div class="flex flex-wrap items-center justify-between gap-3"><div><p class="text-xs text-slate-500">{{ new Date(attempt.submitted_at).toLocaleString() }}</p><p class="mt-1 text-2xl font-black text-emerald-800">{{ attempt.result.score }} / {{ attempt.result.total_marks }}</p></div><div class="text-right text-sm"><p>সঠিক {{ attempt.result.correct_count }} · ভুল {{ attempt.result.wrong_count }}</p><p class="text-xs text-rose-600">কাটা নম্বর {{ attempt.result.wrong_cut_marks }}</p></div></div>
+            <div class="flex flex-wrap items-center justify-between gap-3"><div><p class="text-xs text-slate-500">{{ new Date(attempt.submitted_at).toLocaleString() }}</p><p class="mt-1 text-2xl font-black text-emerald-800">{{ displayScore(attempt.result.score) }} / {{ attempt.result.total_marks }}</p></div><div class="text-right text-sm"><p>সঠিক {{ attempt.result.correct_count }} · ভুল {{ attempt.result.wrong_count }}</p><p class="text-xs text-rose-600">কাটা নম্বর {{ attempt.result.wrong_cut_marks }}</p></div></div>
             <div v-if="attempt.result.wrong_answers?.length" class="mt-4 border-t pt-3"><p class="text-sm font-bold">ভুল প্রশ্নের সঠিক উত্তর</p><div v-for="item in attempt.result.wrong_answers" :key="item.number" class="mt-3 text-sm"><p>{{ item.number }}. {{ item.question }}</p><p class="text-rose-700">আপনার উত্তর: {{ item.selected_answer }}</p><p class="font-semibold text-emerald-700">সঠিক উত্তর: {{ item.correct_answer }}</p></div></div>
           </article></div>
         </section>

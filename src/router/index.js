@@ -20,7 +20,6 @@ const router = createRouter({
     { path: '/gk/exam', name: 'gk-exam', component: ExamView, meta: { title: 'MCQ Exam' } },
     { path: '/gk/exam-categories', name: 'gk-exam-categories', component: () => import('../views/gk/ExamCatalogView.vue'), meta: { title: 'Exam Categories - SohojPath', description: 'Browse published MCQ exam categories.' } },
     { path: '/gk/exam-categories/:slug', name: 'gk-exam-category', component: () => import('../views/gk/ExamCatalogView.vue'), meta: { title: 'Published Exams - SohojPath', description: 'Choose a published exam and test your knowledge.' } },
-    { path: '/gk/exam-paper/:paperId/preview', name: 'gk-exam-paper-preview', component: () => import('../views/gk/ExamPreviewView.vue'), meta: { title: 'Exam Preview - SohojPath' } },
     { path: '/gk/exam-paper/:paperId', name: 'gk-exam-paper', component: () => import('../views/gk/ExamPaperView.vue'), meta: { title: 'MCQ Exam' } },
     { path: '/account', name: 'account', component: AccountView, meta: { title: 'Account' } },
     { path: '/profile', name: 'profile', component: ProfileView, meta: { title: 'Profile' } },

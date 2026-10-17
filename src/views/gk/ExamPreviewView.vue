@@ -24,9 +24,17 @@ onMounted(async () => {
     <section v-else-if="paper" class="panel relative mx-auto w-full max-w-5xl overflow-hidden p-7 md:p-12">
       <span v-if="paper.watermark" class="pointer-events-none absolute inset-0 grid place-items-center overflow-hidden text-6xl font-black text-slate-200/40" style="transform: rotate(-30deg)">{{ paper.watermark }}</span>
       <header class="relative mb-7 border-b pb-4 text-center"><p>{{ category?.name }}</p><h1 class="text-2xl font-black">{{ paper.title }}</h1><p>Duration: {{ paper.duration_minutes }} minutes | Questions: {{ questions.length }}</p></header>
+      <div v-if="paper.notice_text" class="notice-marquee relative mb-5 overflow-hidden border-y border-rose-200 bg-rose-50 py-2 text-sm font-bold text-rose-800"><div class="notice-marquee__track w-max whitespace-nowrap px-4">{{ paper.notice_text }}</div></div>
       <div class="relative grid gap-5" :class="[2, 5].includes(Number(paper.layout_template)) ? 'md:grid-cols-2' : 'grid-cols-1'">
-        <article v-for="(question, index) in questions" :key="question.id" class="break-inside-avoid text-sm"><b>Question {{ formatNumber(index) }}. {{ question.question }}</b><div class="mt-2 grid grid-cols-2 gap-1"><span v-for="key in ['a', 'b', 'c', 'd']" :key="key">{{ paper.option_style === 'alphabet' ? key.toUpperCase() + ')' : '' }}<span v-if="paper.option_style !== 'alphabet'">&#9675;</span> {{ question['option_' + key] }}</span></div></article>
+        <article v-for="(question, index) in questions" :key="question.id" class="break-inside-avoid text-sm"><b>{{ formatNumber(index) }}. {{ question.question }}</b><div class="mt-2 grid grid-cols-2 gap-1"><span v-for="key in ['a', 'b', 'c', 'd']" :key="key">{{ paper.option_style === 'alphabet' ? key.toUpperCase() + ')' : '' }}<span v-if="paper.option_style !== 'alphabet'">&#9675;</span> {{ question['option_' + key] }}</span></div></article>
       </div>
     </section>
   </div></main>
 </template>
+
+<style scoped>
+.notice-marquee__track { animation: exam-notice-marquee 18s linear infinite; }
+.notice-marquee:hover .notice-marquee__track { animation-play-state: paused; }
+@keyframes exam-notice-marquee { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+@media (prefers-reduced-motion: reduce) { .notice-marquee__track { animation: none; transform: none; } }
+</style>

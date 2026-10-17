@@ -27,6 +27,7 @@ let answerSaveQueue = Promise.resolve()
 const secondsLeft = computed(() => Math.max(0, Math.ceil((expiresAt.value - now.value) / 1000)))
 const clockLabel = computed(() => String(Math.floor(secondsLeft.value / 60)).padStart(2, '0') + ':' + String(secondsLeft.value % 60).padStart(2, '0'))
 const answeredCount = computed(() => Object.keys(answers.value).length)
+const displayedScore = computed(() => { const score = Number(result.value?.score); return Number.isFinite(score) ? score : 0 })
 
 function leaveExam() {
   sessionStorage.removeItem(sessionKey)
@@ -154,7 +155,7 @@ onBeforeUnmount(() => window.clearInterval(timerId))
 
       <template v-else-if="result">
         <section class="surface mb-6 overflow-hidden">
-          <div class="bg-emerald-950 px-6 py-6 text-center text-white"><span class="text-xs font-bold uppercase tracking-widest text-emerald-200">পরীক্ষার ফলাফল</span><p class="mt-2 text-5xl font-black">{{ result.score }}</p><p class="mt-1 text-sm text-emerald-100">১০ নম্বরের মধ্যে মোট স্কোর</p></div>
+          <div class="bg-emerald-950 px-6 py-6 text-center text-white"><span class="text-xs font-bold uppercase tracking-widest text-emerald-200">পরীক্ষার ফলাফল</span><p class="mt-2 text-5xl font-black">{{ displayedScore }}</p><p class="mt-1 text-sm text-emerald-100">১০ নম্বরের মধ্যে মোট স্কোর</p></div>
           <div class="grid grid-cols-2 divide-x divide-y divide-slate-100 sm:grid-cols-4 sm:divide-y-0">
             <div class="p-4 text-center"><b class="block text-2xl text-emerald-700">{{ result.correct_count }}</b><span class="text-xs text-slate-500">সঠিক</span></div>
             <div class="p-4 text-center"><b class="block text-2xl text-rose-600">{{ result.wrong_count }}</b><span class="text-xs text-slate-500">ভুল</span></div>
