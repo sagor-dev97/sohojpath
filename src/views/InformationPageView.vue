@@ -47,5 +47,11 @@ watch(title, (value) => { document.title = value + ' - SohojPath' }, { immediate
 .legal-content :deep(h2) { margin: 2rem 0 .75rem; color: #0f172a; font-size: 1.25rem; font-weight: 800; }
 .legal-content :deep(h3) { margin: 1.5rem 0 .6rem; color: #0f172a; font-size: 1.1rem; font-weight: 750; }
 .legal-content :deep(ul), .legal-content :deep(ol) { margin: 0 0 1.2rem; padding-left: 1.5rem; color: #475569; line-height: 1.9; }
+.legal-content :deep(ul) { list-style-type: disc; }
+.legal-content :deep(ol) { list-style-type: decimal; }
+.legal-content :deep(ul ul) { list-style-type: circle; }
+.legal-content :deep(ul ul ul) { list-style-type: square; }
+.legal-content :deep(li) { display: list-item; padding-left: .25rem; }
+.legal-content :deep(li > p) { margin-bottom: .25rem; }
 .legal-content :deep(a) { color: #047857; text-decoration: underline; text-underline-offset: 3px; }
 </style>
