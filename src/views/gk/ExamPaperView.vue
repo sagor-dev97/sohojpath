@@ -22,7 +22,7 @@ const pendingQuestionIds = ref([])
 const saving = ref(false)
 const saved = ref(false)
 let interval
-let autoSubmitStarted = false
+let nextAutoSubmitAt = 0
 let answerSaveQueue = Promise.resolve()
 
 const seconds = computed(() => Math.max(0, Math.ceil((expiry.value - now.value) / 1000)))
@@ -128,8 +128,8 @@ onMounted(async () => {
   }
   interval = setInterval(() => {
     now.value = Date.now()
-    if (!loading.value && !result.value && seconds.value === 0 && pendingQuestionIds.value.length === 0 && !submitting.value && !autoSubmitStarted) {
-      autoSubmitStarted = true
+    if (!loading.value && !result.value && seconds.value === 0 && pendingQuestionIds.value.length === 0 && !submitting.value && Date.now() >= nextAutoSubmitAt) {
+      nextAutoSubmitAt = Date.now() + 5000
       submit()
     }
   }, 500)
