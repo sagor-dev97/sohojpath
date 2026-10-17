@@ -111,7 +111,7 @@ function addWaterRipple(event) {
           <RouterLink class="nav-link" to="/articles" @click="menuOpen=false">{{ $t('nav.recent') }}</RouterLink>
           <RouterLink class="nav-link" to="/gk" @click="menuOpen=false">{{ $t('nav.quiz') }}</RouterLink>
           <RouterLink class="nav-link" to="/jobs" @click="menuOpen=false">{{ $t('nav.jobs') }}</RouterLink>
-          <a href="#about" class="nav-link" @click="menuOpen=false">{{ $t('nav.about') }}</a>
+          <RouterLink class="nav-link" to="/about" @click="menuOpen=false">{{ $t('nav.about') }}</RouterLink>
           <RouterLink v-if="isAuthenticated" class="nav-link" to="/profile" @click="menuOpen=false">{{ $t('nav.profile') }}</RouterLink>
           <RouterLink v-else class="nav-link md:hidden" to="/account" @click="menuOpen=false">{{ $i18n.locale === 'bn' ? 'সাইন ইন' : 'Sign in' }}</RouterLink>
           <button v-if="isAuthenticated" type="button" class="nav-link cursor-pointer" @click="signOut">{{ $i18n.locale === 'bn' ? 'লগআউট' : 'Log out' }}</button>
@@ -131,7 +131,7 @@ function addWaterRipple(event) {
       <div class="container-page grid gap-10 py-12 md:grid-cols-[1.4fr_1fr_1fr]">
         <div><b class="text-xl text-white">সহজপাঠ</b><p class="mt-3 max-w-sm text-sm leading-6 text-slate-400">{{ $t('brand.footer') }}</p></div>
         <div><b class="text-sm text-white">{{ $t('brand.links') }}</b><div class="mt-4 grid gap-3 text-sm"><RouterLink to="/articles">{{ $t('nav.recent') }}</RouterLink><RouterLink to="/gk">{{ $t('nav.quiz') }}</RouterLink><RouterLink to="/jobs">{{ $t('home.recentJobs') }}</RouterLink></div></div>
-        <div><b class="text-sm text-white">{{ $t('brand.info') }}</b><p class="mt-4 text-sm text-slate-400">© {{ new Date().getFullYear() }} সহজপাঠ · {{ $t('brand.rights') }}</p></div>
+        <div><b class="text-sm text-white">{{ $t('brand.info') }}</b><div class="mt-4 grid gap-3 text-sm"><RouterLink to="/about" class="transition hover:text-white">{{ $i18n.locale === 'bn' ? 'আমাদের সম্পর্কে' : 'About us' }}</RouterLink><RouterLink to="/terms" class="transition hover:text-white">{{ $i18n.locale === 'bn' ? 'শর্তাবলি' : 'Terms and conditions' }}</RouterLink><RouterLink to="/privacy" class="transition hover:text-white">{{ $i18n.locale === 'bn' ? 'গোপনীয়তা নীতি' : 'Privacy policy' }}</RouterLink></div><p class="mt-4 text-sm text-slate-400">© {{ new Date().getFullYear() }} সহজপাঠ · {{ $t('brand.rights') }}</p></div>
       </div>
     </footer>
     <Transition name="page-fade">

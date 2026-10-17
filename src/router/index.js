@@ -9,6 +9,24 @@ import ArticleView from '../views/articles/ArticleView.vue'
 import ExamView from '../views/gk/ExamView.vue'
 import AccountView from '../views/AccountView.vue'
 import ProfileView from '../views/ProfileView.vue'
+import InformationPageView from '../views/InformationPageView.vue'
+
+const visitorIdKey = 'sohojpath_visitor_id'
+let visitorId = localStorage.getItem(visitorIdKey)
+if (!visitorId) {
+  visitorId = crypto.randomUUID()
+  localStorage.setItem(visitorIdKey, visitorId)
+}
+let activePath = window.location.pathname
+function sendPresence() {
+  if (document.visibilityState !== 'hidden') {
+    http.post('/tracking/presence', { visitor_id: visitorId, path: activePath }).catch(() => {})
+  }
+}
+setInterval(sendPresence, 30000)
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') sendPresence()
+})
 
 const router = createRouter({
   history: createWebHistory(),
@@ -23,6 +41,9 @@ const router = createRouter({
     { path: '/gk/exam-paper/:paperId', name: 'gk-exam-paper', component: () => import('../views/gk/ExamPaperView.vue'), meta: { title: 'MCQ Exam' } },
     { path: '/account', name: 'account', component: AccountView, meta: { title: 'Account' } },
     { path: '/profile', name: 'profile', component: ProfileView, meta: { title: 'Profile' } },
+    { path: '/about', name: 'about', component: InformationPageView, meta: { title: 'About us' } },
+    { path: '/terms', name: 'terms', component: InformationPageView, meta: { title: 'Terms and conditions' } },
+    { path: '/privacy', name: 'privacy', component: InformationPageView, meta: { title: 'Privacy policy' } },
     { path: '/gk', name: 'gk', component: GkView, meta: { title: 'Daily Quiz - SohojPath', description: 'Take a daily quiz and check your preparation.' } },
     { path: '/articles', name: 'articles', component: ArticlesView, meta: { title: 'Recent News - SohojPath', description: 'Read recent events, news and updates.' } },
     { path: '/articles/:slug', name: 'article', component: ArticleView, meta: { title: 'Recent News - SohojPath', description: 'Read the full details of this recent news article.' } },
@@ -31,6 +52,7 @@ const router = createRouter({
 })
 
 router.afterEach((to) => {
+  activePath = to.path
   document.title = to.meta.title || 'SohojPath - Education and Job Updates'
   const description = document.querySelector('meta[name="description"]')
   if (description) description.content = to.meta.description || 'Education, jobs and general knowledge updates in one place.'
@@ -60,6 +82,7 @@ router.afterEach((to) => {
   }
 
   http.post('/tracking/hit', { path: to.path }).catch(() => {})
+  sendPresence()
 })
 
 export default router
