@@ -53,15 +53,33 @@ let bannerTimer
 function nextBanner() {
   if (banners.value.length > 1) activeBannerIndex.value = (activeBannerIndex.value + 1) % banners.value.length
 }
+
 function previousBanner() {
   if (banners.value.length > 1) activeBannerIndex.value = (activeBannerIndex.value - 1 + banners.value.length) % banners.value.length
 }
-function startBannerTimer() {
-  window.clearInterval(bannerTimer)
-  if (banners.value.length > 1) bannerTimer = window.setInterval(nextBanner, 7000)
+
+function goToBanner(index) {
+  activeBannerIndex.value = index
 }
+
 function pauseBannerTimer() {
   window.clearInterval(bannerTimer)
+}
+function startBannerTimer() {
+  window.clearInterval(bannerTimer)
+  if (banners.value.length > 1) bannerTimer = window.setInterval(nextBanner, 4500)
+}
+
+
+function createBannerRipple(event) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+  const ripple = document.createElement('span')
+  ripple.className = 'water-ripple'
+  ripple.style.left = `${event.clientX}px`
+  ripple.style.top = `${event.clientY}px`
+  document.body.appendChild(ripple)
+  ripple.addEventListener('animationend', () => ripple.remove(), { once: true })
 }
 
 onMounted(async () => {
@@ -90,13 +108,14 @@ onMounted(async () => {
   startBannerTimer()
 })
 
-onBeforeUnmount(pauseBannerTimer)
+onBeforeUnmount(() => window.clearInterval(bannerTimer))
 </script>
 
 <template>
   <div class="container-page">
+    <div class="container-page">
     <Transition name="banner-slide" mode="out-in">
-      <section :key="activeBannerIndex" class="relative isolate mt-8 overflow-hidden rounded-[2rem] px-6 py-12 text-white shadow-xl md:mt-12 md:px-14 md:py-16 xl:grid xl:min-h-[390px] xl:grid-cols-[1.4fr_1fr] xl:items-center xl:gap-10" :class="activeBanner.theme === 'students' ? 'bg-gradient-to-br from-indigo-950 via-sky-900 to-emerald-900' : 'bg-emerald-950'" aria-roledescription="carousel" aria-label="Home banners" @mouseenter="pauseBannerTimer" @mouseleave="startBannerTimer" @focusin="pauseBannerTimer" @focusout="startBannerTimer">
+      <section :key="activeBannerIndex" class="banner-carousel relative isolate mt-8 overflow-hidden rounded-[2rem] px-6 py-12 text-white shadow-xl md:mt-12 md:px-14 md:py-16 xl:grid xl:min-h-[390px] xl:grid-cols-[1.4fr_1fr] xl:items-center xl:gap-10" :class="activeBanner.theme === 'students' ? 'bg-gradient-to-br from-indigo-950 via-sky-900 to-emerald-900' : 'bg-emerald-950'" aria-roledescription="carousel" aria-label="Home banners" @click="createBannerRipple" @mouseenter="pauseBannerTimer" @mouseleave="startBannerTimer">
         <span class="banner-orbit pointer-events-none absolute -right-20 -top-24 size-80 rounded-full border border-white/10"></span>
         <span v-if="activeBanner.theme === 'students'" class="banner-orbit banner-orbit--second pointer-events-none absolute -bottom-40 right-1/4 size-96 rounded-full border border-cyan-200/10"></span>
         <div class="relative z-10 max-w-2xl xl:max-w-3xl">
@@ -115,20 +134,44 @@ onBeforeUnmount(pauseBannerTimer)
           </div>
           <span class="banner-float absolute bottom-1 left-10 rounded-full border border-white/20 bg-indigo-500/70 px-4 py-2 text-sm font-bold shadow-lg">শেখা হোক আনন্দের ✨</span>
         </div>
-        <div v-else class="relative mt-10 grid max-w-xl grid-cols-3 gap-3 md:absolute md:bottom-12 md:right-12 md:w-[360px] xl:static xl:mt-8 xl:ml-auto xl:w-full xl:max-w-lg">
-          <div class="rounded-2xl border border-white/10 bg-white/5 p-4"><span class="text-2xl">📋</span><p class="mt-2 text-xs text-emerald-100/70">{{ $t('nav.jobs') }}</p></div>
-          <div class="rounded-2xl border border-white/10 bg-white/5 p-4"><span class="text-2xl">📚</span><p class="mt-2 text-xs text-emerald-100/70">{{ $t('home.practice') }}</p></div>
-          <div class="rounded-2xl border border-white/10 bg-white/5 p-4"><span class="text-2xl">🎯</span><p class="mt-2 text-xs text-emerald-100/70">{{ $t('home.heroLine2') }}</p></div>
+        <div v-else class="job-banner-art relative mx-auto mt-10 grid min-h-64 w-full max-w-lg place-items-center xl:mt-0" aria-hidden="true">
+          <span class="job-banner-glow absolute size-64 rounded-full bg-emerald-400/15 blur-3xl"></span>
+          <span class="job-banner-ring absolute size-60 rounded-full border border-emerald-100/15"></span>
+          <span class="job-banner-ring job-banner-ring--outer absolute size-72 rounded-full border border-white/10"></span>
+          <div class="job-banner-float job-banner-float--left absolute left-2 top-8 rounded-2xl border border-white/15 bg-white/10 p-4 shadow-xl backdrop-blur-md sm:left-8">
+            <span class="mb-2 block text-xs font-semibold text-emerald-100/75">{{ $t('home.career') }}</span>
+            <span class="flex items-center gap-2"><span class="grid size-8 place-items-center rounded-lg bg-amber-300 text-emerald-950">↗</span><span class="text-sm font-bold">{{ $t('nav.jobs') }}</span></span>
+          </div>
+          <div class="job-banner-float job-banner-float--right absolute right-1 top-12 rounded-2xl border border-white/15 bg-slate-950/35 px-4 py-3 shadow-xl backdrop-blur-md sm:right-6">
+            <span class="flex items-center gap-2 text-xs font-semibold"><span class="size-2 rounded-full bg-emerald-300 shadow-[0_0_12px_#6ee7b7]"></span>{{ $t('home.recentJobs') }}</span>
+          </div>
+          <div class="job-banner-case relative grid size-40 place-items-center rounded-[2.5rem] border border-white/20 bg-gradient-to-br from-emerald-300/25 to-teal-500/10 shadow-[0_24px_80px_rgba(0,0,0,.25)] backdrop-blur-xl sm:size-48">
+            <span class="job-banner-case__shine absolute inset-2 rounded-[2rem] border border-white/10"></span>
+            <svg class="job-banner-case__icon relative z-10 size-20 text-emerald-100 sm:size-24" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="13" y="31" width="70" height="49" rx="11" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="4" />
+              <path d="M35 31V23a7 7 0 0 1 7-7h12a7 7 0 0 1 7 7v8M13 49h70M39 48v9h18v-9" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="m67 20 4 4 8-9" stroke="#fde68a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span class="job-banner-spark job-banner-spark--one absolute right-5 top-5 text-amber-200">✦</span>
+            <span class="job-banner-spark job-banner-spark--two absolute bottom-7 left-5 text-emerald-200">✧</span>
+          </div>
+          <div class="job-banner-float job-banner-float--bottom absolute bottom-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold text-emerald-50 shadow-lg backdrop-blur-md">{{ $t('home.seeJobs') }} <span class="ml-1 text-amber-200">✦</span></div>
         </div>
-        <div v-if="banners.length > 1" class="relative z-10 mt-7 flex items-center justify-center gap-3 xl:absolute xl:bottom-5 xl:left-1/2 xl:mt-0 xl:-translate-x-1/2">
-          <button type="button" class="grid size-9 place-items-center rounded-full border border-white/20 bg-white/10 text-sm transition hover:bg-white/20" aria-label="Previous banner" @click="previousBanner">←</button>
-          <button v-for="(banner, index) in banners" :key="banner.id || index" type="button" class="h-2 rounded-full transition-all" :class="index === activeBannerIndex ? 'w-7 bg-white' : 'w-2 bg-white/40 hover:bg-white/70'" :aria-label="`Show banner ${index + 1}`" :aria-current="index === activeBannerIndex ? 'true' : undefined" @click="activeBannerIndex = index; startBannerTimer()"></button>
-          <button type="button" class="grid size-9 place-items-center rounded-full border border-white/20 bg-white/10 text-sm transition hover:bg-white/20" aria-label="Next banner" @click="nextBanner">→</button>
+        <div v-if="banners.length > 1" class="banner-controls" role="group" aria-label="Banner carousel controls" @click.stop>
+          <button class="banner-control-button" type="button" aria-label="Previous banner" @click="previousBanner" @mouseenter="pauseBannerTimer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="banner-control-dots" aria-label="Choose a banner">
+            <button v-for="(banner, index) in banners" :key="banner.id" class="banner-control-dot" :class="{ 'is-active': index === activeBannerIndex }" type="button" :aria-label="`Show banner ${index + 1}`" :aria-current="index === activeBannerIndex ? 'true' : undefined" @click="goToBanner(index)" @mouseenter="pauseBannerTimer"></button>
+          </div>
+          <button class="banner-control-button" type="button" aria-label="Next banner" @click="nextBanner" @mouseenter="pauseBannerTimer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 18 6-6-6-6m6 6H3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
-      </section>
+            </section>
     </Transition>
     <AdSlot slot="home" />
-    <RecentArticlesSection :limit="12" />
+    <RecentArticlesSection :limit="12" :contained="false" />
     <section class="my-14 grid gap-5 md:grid-cols-[1fr_1.3fr]">
       <div class="surface bg-amber-50/80 p-7"><span class="eyebrow !text-amber-700">{{ $t('home.dailyChallenge') }}</span><h2 class="mt-2 text-2xl font-extrabold text-slate-900">{{ $t('home.playQuiz') }}</h2><p class="mt-2 text-sm leading-6 text-slate-600">{{ $t('home.challengeText') }}</p><RouterLink to="/gk" class="btn-primary mt-5">{{ $t('home.startQuiz') }} <span>?</span></RouterLink></div>
       <div class="surface flex items-center gap-5 p-7"><div class="grid size-14 shrink-0 place-items-center rounded-2xl bg-amber-100 text-2xl">💡</div><div><p class="text-xs font-bold uppercase tracking-wide text-amber-700">{{ $t('home.todayQuestion') }}</p><p v-if="quiz" class="mt-1 font-bold text-slate-900">{{ quiz.question }}</p><p v-else class="mt-1 text-sm text-slate-500">{{ $t('home.questionSoon') }}</p><RouterLink to="/gk" class="mt-2 inline-block text-sm font-semibold text-emerald-700">{{ $t('home.answer') }} ?</RouterLink></div></div>
@@ -146,5 +189,6 @@ onBeforeUnmount(pauseBannerTimer)
       </div>
       <div v-else class="surface p-10 text-center"><span class="text-3xl">🗂️?</span><h3 class="mt-3 font-bold">{{ $t('home.noJobs') }}</h3><p class="mt-1 text-sm text-slate-500">{{ $t('home.noJobsHint') }}</p></div>
     </section>
+    </div>
   </div>
 </template>

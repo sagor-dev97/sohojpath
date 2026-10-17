@@ -32,13 +32,16 @@ watch(() => route.params.slug, loadArticle)
     <RouterLink to="/articles" class="text-sm font-semibold text-emerald-700">← সাম্প্রতিক খবরে ফিরুন</RouterLink>
     <p v-if="loading" class="surface mt-6 p-10 text-center text-slate-500">খবর লোড হচ্ছে…</p>
     <p v-else-if="error" class="surface mt-6 p-10 text-center text-slate-600">{{ error }}</p>
-    <article v-else-if="article" class="surface mx-auto mt-6 max-w-4xl overflow-hidden">
-      <img v-if="article.image_url" :src="article.image_url" :alt="article.title" class="max-h-[520px] w-full object-cover">
-      <div class="p-6 md:p-10">
-        <p class="text-sm font-semibold text-emerald-700">{{ article.published_at ? new Date(article.published_at).toLocaleDateString('bn-BD', { dateStyle: 'long' }) : '' }}</p>
-        <h1 class="mt-3 text-3xl font-extrabold leading-tight text-slate-950 md:text-4xl">{{ article.title }}</h1>
-        <p v-if="article.excerpt" class="mt-4 text-lg leading-8 text-slate-600">{{ article.excerpt }}</p>
-        <div class="article-body prose mt-8 max-w-none leading-8 text-slate-700" v-html="article.body"></div>
+    <article v-else-if="article" class="article-detail-layout mt-6 grid gap-0 overflow-hidden md:gap-6 md:overflow-visible" :class="article.image_url ? 'md:grid-cols-[minmax(300px,0.42fr)_minmax(0,1fr)]' : 'md:grid-cols-1'">
+      <aside v-if="article.image_url" class="article-detail-panel article-image-card self-start overflow-hidden">
+        <img :src="article.image_url" :alt="article.title" class="max-h-[520px] w-full object-cover">
+        <h2 class="article-image-title p-5 text-2xl font-extrabold leading-tight text-slate-950 md:p-6">{{ article.title }}</h2>
+      </aside>
+      <div class="article-detail-panel p-6 md:p-10">
+        <h1 class="text-3xl font-extrabold leading-tight text-slate-950 md:text-4xl">{{ article.title }}</h1>
+        <p class="mt-3 text-sm font-semibold text-emerald-700">{{ article.published_at ? new Date(article.published_at).toLocaleDateString('bn-BD', { dateStyle: 'long' }) : '' }}</p>
+        <p v-if="article.excerpt" class="mt-6 text-lg leading-8 text-slate-600">{{ article.excerpt }}</p>
+        <div class="article-body prose max-w-none leading-8 text-slate-700" :class="article.excerpt ? 'mt-6' : 'mt-8'" v-html="article.body"></div>
       </div>
     </article>
   </div>
