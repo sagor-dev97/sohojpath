@@ -169,7 +169,7 @@ onBeforeUnmount(() => window.clearInterval(timerId))
         <p v-else class="surface p-6 text-center font-bold text-emerald-800">দারুণ! কোনো ভুল উত্তর নেই।</p>
         <AdSlot label="বিজ্ঞাপন" />
         <p v-if="error" class="mt-4 rounded-xl bg-rose-50 p-3 text-sm text-rose-700">{{ error }}</p>
-        <div class="mt-6 flex flex-wrap justify-center gap-3"><button v-if="!saved" class="btn-primary" :disabled="saving" @click="saveRecord">{{ saving ? 'সংরক্ষণ হচ্ছে…' : 'Save this record' }}</button><RouterLink v-else to="/profile" class="btn-primary">আমার সংরক্ষিত ফলাফল</RouterLink><RouterLink to="/gk" class="rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-bold text-slate-700">জিকে কুইজে ফিরুন</RouterLink></div>
+        <div class="mt-6 flex flex-wrap justify-center gap-3"><button v-if="!saved" class="btn-primary" :disabled="saving" @click="saveRecord">{{ saving ? 'সংরক্ষণ হচ্ছে…' : 'Save this record' }}</button><RouterLink v-else to="/profile" class="btn-primary">আমার সংরক্ষিত ফলাফল</RouterLink><RouterLink to="/gk" class="rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-bold text-slate-700">কুইজে ফিরুন</RouterLink></div>
       </template>
 
       <template v-else>
